@@ -1675,11 +1675,11 @@ MonoBehaviour:
   speed: 1
   direction: 0
   BoolGrounded: 1
-  maxSpeed: 5
-  accelerationTime: 0.5
-  jumpStrength: 1
-  jump: 0
-  jumpTime: 100
+  maxSpeed: 0.5
+  accelerationTime: 0.05
+  jumpStrength: 12
+  jump: 1
+  jumpTime: 20
   apexHeight: 3
   apexTime: 1
   airControl: 2

@@ -58,7 +58,10 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButton("Jump"))
         {
-            jump -= jumpTime * Time.deltaTime;
+            if (jump >= 0)
+            {
+                jump -= jumpTime * Time.deltaTime;
+            }
         }
         if (Input.GetButtonUp("Jump"))
         {
@@ -86,11 +89,20 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            movement.x = playerInput.x * accelerationRate / airControl;
+            movement.x = playerInput.x * accelerationRate;
+            movement.x = movement.x / airControl;
         }
         
         movement.y = playerInput.y * apexRate;
-        rb.velocity += movement * Time.deltaTime;
+        rb.velocity += movement * Time.fixedDeltaTime;
+        if (playerInput.x < 0)
+        {
+            currentDirection = FacingDirection.left;
+        }
+        if (playerInput.x > 0)
+        {
+            currentDirection = FacingDirection.right;
+        }
     }
 
     public bool IsWalking()
@@ -135,14 +147,6 @@ public class PlayerController : MonoBehaviour
 
     public FacingDirection GetFacingDirection()
     {
-        if (rb.velocity.x < 0)
-        {
-            currentDirection = FacingDirection.left;
-        }
-        if (rb.velocity.x > 0)
-        {
-            currentDirection = FacingDirection.right;
-        }
         return currentDirection;
     }
 }
