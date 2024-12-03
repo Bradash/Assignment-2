@@ -89,6 +89,10 @@ public class PlayerController : MonoBehaviour
         {
             dashTime -= Time.deltaTime;
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            rb.gravityScale += 10;
+        }
 
     }
     private void FixedUpdate()
