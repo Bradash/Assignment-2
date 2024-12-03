@@ -1824,7 +1824,7 @@ MonoBehaviour:
   accelerationTime: 0.2
   jumpStrength: 8
   jump: 0
-  jumpTime: 100
+  jumpTime: 1
   apexHeight: 3
   apexTime: 1
   airControl: 2
