@@ -1822,9 +1822,9 @@ MonoBehaviour:
   BoolGrounded: 1
   maxSpeed: 3
   accelerationTime: 0.2
-  jumpStrength: 8
+  jumpStrength: 7.5
   jump: 0
-  jumpTime: 1
+  jumpTime: 5
   apexHeight: 3
   apexTime: 1
   airControl: 2
@@ -1837,6 +1837,7 @@ MonoBehaviour:
   tRender: {fileID: 103792597}
   maxJumpCount: 2
   jumpCount: 2
+  isPounding: 0
 --- !u!4 &1433354315
 Transform:
   m_ObjectHideFlags: 0

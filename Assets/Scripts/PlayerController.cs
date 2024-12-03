@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public TrailRenderer tRender;
     public int maxJumpCount;
     public int jumpCount;
+    public bool isPounding;
 
     public enum FacingDirection
     {
@@ -92,6 +93,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             rb.gravityScale += 10;
+            isPounding = true;
+            IsPound();
+        }
+        else
+        {
+            isPounding = false;
         }
 
     }
@@ -138,6 +145,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool IsPound()
+    {
+        return isPounding;
+    }
     public bool IsWalking()
     {
         if (rb.velocity.x != 0)
