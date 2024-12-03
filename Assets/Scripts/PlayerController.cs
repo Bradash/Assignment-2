@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     { 
+        //COYOTE TIMER && GROUND CHECK
 
         if (BoolGrounded == false && coyoteTimer > 0)
         {
@@ -59,6 +60,9 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = 1;
             coyoteTimer = coyoteTime;
         }
+
+        //DYNAMIC JUMP INPUTS
+
         if (Input.GetButtonDown("Jump") && coyoteTimer > 0)
         {
             jump = 1 * jumpStrength;
@@ -82,6 +86,9 @@ public class PlayerController : MonoBehaviour
             jump = 0 * jumpStrength;
             coyoteTimer = 0;
         }
+
+        //DASH
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             dashTime = 1 * maxDashTime;
@@ -90,9 +97,12 @@ public class PlayerController : MonoBehaviour
         {
             dashTime -= Time.deltaTime;
         }
+
+        //GROUNDPOUND
+
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            rb.gravityScale += 10;
+            rb.gravityScale += 5;
             isPounding = true;
             IsPound();
         }
@@ -104,16 +114,15 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        // The input from the player needs to be determined and
-        // then passed in the to the MovementUpdate which should
-        // manage the actual movement of the character.
         Vector2 playerInput = new Vector2();
         playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), jump);
         MovementUpdate(playerInput);
+        Mathf.Clamp(rb.velocity.x, - maxSpeed, maxSpeed);
     }
 
     private void MovementUpdate(Vector2 playerInput)
     {
+        //HORIZONTAL MOVEMENT
         Vector2 movement;
         if (BoolGrounded == true)
         {
@@ -124,7 +133,7 @@ public class PlayerController : MonoBehaviour
             movement.x = playerInput.x * accelerationRate;
             movement.x = movement.x / airControl;
         }
-        if (dashTime > maxDashTime / 2)
+        if (dashTime > maxDashTime * 0.75)
         {
             movement.x = movement.x * dashStrength;
             tRender.enabled = true;
@@ -133,7 +142,9 @@ public class PlayerController : MonoBehaviour
         {
             tRender.enabled = false;
         }
+        //VERTICAL MOVEMENT
         movement.y = playerInput.y * apexRate;
+        //APPLYING TO Rigidbody
         rb.velocity += movement * Time.fixedDeltaTime;
         if (playerInput.x < 0)
         {
