@@ -24,6 +24,12 @@ public class PlayerController : MonoBehaviour
     public float terminalTime;
     public float coyoteTime;
     public float coyoteTimer;
+    float dashTime;
+    public float dashStrength;
+    public float maxDashTime;
+    public TrailRenderer tRender;
+    public int maxJumpCount;
+    public int jumpCount;
 
     public enum FacingDirection
     {
@@ -55,6 +61,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && coyoteTimer > 0)
         {
             jump = 1 * jumpStrength;
+            jumpCount -= 1;
+
         }
         if (Input.GetButton("Jump"))
         {
@@ -63,12 +71,25 @@ public class PlayerController : MonoBehaviour
                 jump -= jumpTime * Time.deltaTime;
             }
         }
-        if (Input.GetButtonUp("Jump"))
+        if (Input.GetButtonUp("Jump") && jumpCount > 0)
+        {
+            jump = 0 * jumpStrength;
+            coyoteTimer = 1;
+        }
+        if (Input.GetButtonUp("Jump") && jumpCount <= 0)
         {
             jump = 0 * jumpStrength;
             coyoteTimer = 0;
         }
-        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            dashTime = 1 * maxDashTime;
+        }
+        if (dashTime > 0)
+        {
+            dashTime -= Time.deltaTime;
+        }
+
     }
     private void FixedUpdate()
     {
@@ -92,7 +113,15 @@ public class PlayerController : MonoBehaviour
             movement.x = playerInput.x * accelerationRate;
             movement.x = movement.x / airControl;
         }
-        
+        if (dashTime > maxDashTime / 2)
+        {
+            movement.x = movement.x * dashStrength;
+            tRender.enabled = true;
+        }
+        else
+        {
+            tRender.enabled = false;
+        }
         movement.y = playerInput.y * apexRate;
         rb.velocity += movement * Time.fixedDeltaTime;
         if (playerInput.x < 0)
@@ -123,14 +152,13 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.tag == "Ground")
         {
             BoolGrounded = true;
+            jumpCount = maxJumpCount;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
     {
         BoolGrounded = false;
     }
-
-
 
     public bool IsGrounded()
     {
